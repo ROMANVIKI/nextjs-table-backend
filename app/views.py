@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, get_list_or_404
 from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
@@ -15,7 +15,16 @@ class ListDataTableView(ListAPIView):
     permission_classes = [AllowAny]
 
 
+class CreateDataTableAPIView(CreateAPIView):
+    queryset = DataTable.objects.all()
+    serializer_class = DataTableSerializer
+    permission_classes = [AllowAny]
+
+
 class RetrieveUpdateDestroyDataTableAPIView(RetrieveUpdateDestroyAPIView):
     queryset = DataTable.objects.all()
     serializer_class = DataTableSerializer
     permission_classes = [AllowAny]
+
+    def get_object(self):
+        return get_object_or_404(DataTable, code=self.kwargs["code"])
